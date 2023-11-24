@@ -1,5 +1,5 @@
 # plugin.video.ppcrn
-![Logo](resources/screenshots/screenshot-3.jpg)
+![Logo](resources/screenshots/screenshot-2.jpg)
 
 Kodi kiegészítő a ppcrn-hez
 
