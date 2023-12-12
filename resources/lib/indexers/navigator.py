@@ -30,6 +30,22 @@ sysaddon = sys.argv[0]
 syshandle = int(sys.argv[1])
 addonFanart = xbmcaddon.Addon().getAddonInfo('fanart')
 
+import platform
+import xml.etree.ElementTree as ET
+
+os_info = platform.platform()
+kodi_version = xbmc.getInfoLabel('System.BuildVersion')
+
+current_directory = os.path.dirname(os.path.abspath(__file__))
+parent_directory = os.path.dirname(os.path.dirname(os.path.dirname(current_directory)))
+addon_xml_path = os.path.join(parent_directory, "addon.xml")
+
+tree = ET.parse(addon_xml_path)
+root = tree.getroot()
+version = root.attrib.get("version")
+
+xbmc.log(f'PPCRN | v{version} | Kodi: {kodi_version[:5]}| OS: {os_info}', xbmc.LOGINFO)
+
 base_url = 'https://ppcrn.eu'
 
 headers = {
@@ -107,7 +123,7 @@ class navigator:
             
             self.addDirectoryItem('[I]Következő oldal[/I]', f'series_items&url={quote_plus(next_page_url)}', '', 'DefaultFolder.png')
         except AttributeError:
-            xbmc.log(f'PPCRN | getSeriesItems | next_page_url | csak egy oldal található', xbmc.LOGINFO)
+            xbmc.log(f'PPCRN | v{version} | Kodi: {kodi_version[:5]}| OS: {os_info} | getSeriesItems | next_page_url | csak egy oldal található', xbmc.LOGINFO)
         
         self.endDirectory('movies')
 
@@ -204,7 +220,7 @@ class navigator:
         
         
         except (UnboundLocalError, AttributeError):
-            xbmc.log(f'PPCRN | getSeasonProviders | name: No video sources found', xbmc.LOGINFO)
+            xbmc.log(f'PPCRN | v{version} | Kodi: {kodi_version[:5]}| OS: {os_info} | getSeasonProviders | name: No video sources found', xbmc.LOGINFO)
             notification = xbmcgui.Dialog()
             notification.notification("PPCRN", "Törölt tartalom", time=5000)                
         
@@ -239,7 +255,7 @@ class navigator:
             
             self.addDirectoryItem('[I]Következő oldal[/I]', f'season_items&url={quote_plus(next_page_url)}', '', 'DefaultFolder.png')
         except AttributeError:
-            xbmc.log(f'PPCRN | getOnlySeries | next_page_url | csak egy oldal található', xbmc.LOGINFO)
+            xbmc.log(f'PPCRN | v{version} | Kodi: {kodi_version[:5]}| OS: {os_info} | getOnlySeries | next_page_url | csak egy oldal található', xbmc.LOGINFO)
         
         self.endDirectory('movies')      
 
@@ -299,19 +315,24 @@ class navigator:
             
             self.addDirectoryItem('[I]Következő oldal[/I]', f'season_items&url={quote_plus(next_page_url)}', '', 'DefaultFolder.png')
         except AttributeError:
-            xbmc.log(f'PPCRN | getOnlySeries | next_page_url | csak egy oldal található', xbmc.LOGINFO)
+            xbmc.log(f'PPCRN | v{version} | Kodi: {kodi_version[:5]}| OS: {os_info} | getOnlySeries | next_page_url | csak egy oldal található', xbmc.LOGINFO)
         
         self.endDirectory('movies')
 
     def playMovie(self, url):
         try:
             direct_url = urlresolver.resolve(url)
-            
-            xbmc.log(f'PPCRN | playMovie | direct_url: {direct_url}', xbmc.LOGINFO)
+            xbmc.log(f'PPCRN | v{version} | Kodi: {kodi_version[:5]}| OS: {os_info} | playMovie | direct_url: {direct_url}', xbmc.LOGINFO)
             play_item = xbmcgui.ListItem(path=direct_url)
+            if 'm3u8' in direct_url:
+                from inputstreamhelper import Helper
+                is_helper = Helper('hls')
+                if is_helper.check_inputstream():
+                    play_item.setProperty('inputstream', 'inputstream.adaptive')  # compatible with recent builds Kodi 19 API
+                    play_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
             xbmcplugin.setResolvedUrl(syshandle, True, listitem=play_item)
         except:
-            xbmc.log(f'PPCRN | playMovie | name: No video sources found', xbmc.LOGINFO)
+            xbmc.log(f'PPCRN | v{version} | Kodi: {kodi_version[:5]}| OS: {os_info} | playMovie | name: No video sources found', xbmc.LOGINFO)
             notification = xbmcgui.Dialog()
             notification.notification("PPCRN", "Törölt tartalom", time=5000)
 
@@ -334,7 +355,7 @@ class navigator:
             
             self.addDirectoryItem('[I]Következő oldal[/I]', f'extr_search&url={quote_plus(next_page_url)}', '', 'DefaultFolder.png')
         except AttributeError:
-            xbmc.log(f'PPCRN | getOnlySeries | next_page_url | csak egy oldal található', xbmc.LOGINFO)        
+            xbmc.log(f'PPCRN | v{version} | Kodi: {kodi_version[:5]}| OS: {os_info} | getOnlySeries | next_page_url | csak egy oldal található', xbmc.LOGINFO)        
         
         
         self.endDirectory('movies')
