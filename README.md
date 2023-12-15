@@ -3,6 +3,8 @@
 
 Kodi kiegészítő a ppcrn-hez
 
+1.0.2 - os verzió kiszedése
+
 1.0.1 - inputstream adaptive hozzáadása hls-hez
 
 1.0.0 - Első verzió
