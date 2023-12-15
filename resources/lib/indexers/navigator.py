@@ -312,7 +312,7 @@ class navigator:
     def playMovie(self, url):
         try:
             direct_url = urlresolver.resolve(url)
-            xbmc.log(f'PPCRN | v{version} | Kodi: {kodi_version[:5]}| OS: {os_info} | playMovie | direct_url: {direct_url}', xbmc.LOGINFO)
+            xbmc.log(f'{base_log_info}| playMovie | direct_url: {direct_url}', xbmc.LOGINFO)
             play_item = xbmcgui.ListItem(path=direct_url)
             if 'm3u8' in direct_url:
                 from inputstreamhelper import Helper
@@ -322,7 +322,7 @@ class navigator:
                     play_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
             xbmcplugin.setResolvedUrl(syshandle, True, listitem=play_item)
         except:
-            xbmc.log(f'PPCRN | v{version} | Kodi: {kodi_version[:5]}| OS: {os_info} | playMovie | name: No video sources found', xbmc.LOGINFO)
+            xbmc.log(f'{base_log_info}| playMovie | name: No video sources found', xbmc.LOGINFO)
             notification = xbmcgui.Dialog()
             notification.notification("PPCRN", "Törölt tartalom", time=5000)
 
