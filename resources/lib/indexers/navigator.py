@@ -318,7 +318,6 @@ class navigator:
                 from inputstreamhelper import Helper
                 is_helper = Helper('hls')
                 if is_helper.check_inputstream():
-                    play_item.setProperty('inputstream', 'inputstream.adaptive')  # compatible with recent builds Kodi 19 API
                     play_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
             xbmcplugin.setResolvedUrl(syshandle, True, listitem=play_item)
         except:
